@@ -21,21 +21,16 @@ export default function AdminDashboard() {
   const [saveStatus, setSaveStatus] = useState<string | null>(null);
 
   useEffect(() => {
-    // Check Active Session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
-      if (session) {
-        fetchAllData();
-      }
+      if (session) fetchAllData();
     });
 
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
-      if (session) {
-        fetchAllData();
-      }
+      if (session) fetchAllData();
     });
 
     return () => subscription.unsubscribe();
@@ -46,10 +41,7 @@ export default function AdminDashboard() {
     setAuthLoading(true);
     setAuthError(null);
 
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
     if (error) {
       setAuthError(error.message);
@@ -67,21 +59,18 @@ export default function AdminDashboard() {
   async function fetchAllData() {
     setLoadingData(true);
     try {
-      // 1. Fetch Bookings
       const { data: bData } = await supabase
         .from('booking_requests')
         .select('*')
         .order('created_at', { ascending: false });
       setBookings(bData || []);
 
-      // 2. Fetch Self Drive Fleet
       const { data: sdData } = await supabase
         .from('self_drive_cars')
         .select('*')
         .order('display_order', { ascending: true });
       setSelfDriveFleet(sdData || []);
 
-      // 3. Fetch With Driver Fleet
       const { data: wdData } = await supabase
         .from('with_driver_cars')
         .select('*')
@@ -94,9 +83,8 @@ export default function AdminDashboard() {
     }
   }
 
-  // Update Self Drive Car
   async function handleUpdateSelfDrive(carId: string, updates: any) {
-    setSaveStatus('Saving changes...');
+    setSaveStatus('Saving...');
     const { error } = await supabase
       .from('self_drive_cars')
       .update({ ...updates, updated_at: new Date().toISOString() })
@@ -107,13 +95,12 @@ export default function AdminDashboard() {
     } else {
       setSaveStatus('Saved successfully!');
       fetchAllData();
-      setTimeout(() => setSaveStatus(null), 3000);
+      setTimeout(() => setSaveStatus(null), 2500);
     }
   }
 
-  // Update With Driver Car
   async function handleUpdateWithDriver(carId: string, updates: any) {
-    setSaveStatus('Saving changes...');
+    setSaveStatus('Saving...');
     const { error } = await supabase
       .from('with_driver_cars')
       .update({ ...updates, updated_at: new Date().toISOString() })
@@ -124,11 +111,10 @@ export default function AdminDashboard() {
     } else {
       setSaveStatus('Saved successfully!');
       fetchAllData();
-      setTimeout(() => setSaveStatus(null), 3000);
+      setTimeout(() => setSaveStatus(null), 2500);
     }
   }
 
-  // Update Booking Status & Internal Notes
   async function handleUpdateBooking(bookingId: string, updates: any) {
     setSaveStatus('Updating booking...');
     const { error } = await supabase
@@ -141,11 +127,11 @@ export default function AdminDashboard() {
     } else {
       setSaveStatus('Booking updated!');
       fetchAllData();
-      setTimeout(() => setSaveStatus(null), 3000);
+      setTimeout(() => setSaveStatus(null), 2500);
     }
   }
 
-  // --- LOGIN SCREEN ---
+  // Login Screen
   if (!session) {
     return (
       <div className="min-h-[80vh] flex items-center justify-center px-4">
@@ -154,8 +140,8 @@ export default function AdminDashboard() {
             <div className="w-12 h-12 bg-slate-900 text-white rounded-2xl flex items-center justify-center mx-auto font-black text-xl mb-3">
               🔒
             </div>
-            <h1 className="text-2xl font-black text-slate-900">Admin Login</h1>
-            <p className="text-xs text-slate-500">Sign in to manage cars, pricing and booking requests.</p>
+            <h1 className="text-2xl font-black text-slate-900">Admin Operations</h1>
+            <p className="text-xs text-slate-500">Sign in to manage fleets, rates, and incoming booking requests.</p>
           </div>
 
           {authError && (
@@ -166,13 +152,13 @@ export default function AdminDashboard() {
 
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">Email Address</label>
+              <label className="block text-xs font-bold text-slate-700 mb-1">Email</label>
               <input
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="carswithdriverindia@gmail.com"
+                placeholder="admin@example.com"
                 className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm focus:outline-emerald-600"
               />
             </div>
@@ -194,7 +180,7 @@ export default function AdminDashboard() {
               disabled={authLoading}
               className="w-full bg-slate-900 hover:bg-slate-800 disabled:bg-slate-500 text-white font-bold py-3 rounded-xl text-sm transition-all"
             >
-              {authLoading ? 'Signing In...' : 'Sign In to Admin Portal →'}
+              {authLoading ? 'Signing In...' : 'Sign In ➔'}
             </button>
           </form>
         </div>
@@ -202,16 +188,16 @@ export default function AdminDashboard() {
     );
   }
 
-  // --- LOGGED IN DASHBOARD ---
+  // Logged-In Dashboard
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
       
-      {/* Top Bar */}
+      {/* Header Bar */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-slate-900 text-white p-6 rounded-3xl">
         <div>
-          <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider">Secure Operations Portal</span>
-          <h1 className="text-2xl font-black">Car With Driver India • Admin</h1>
-          <p className="text-xs text-slate-400 mt-0.5">Logged in as: {session.user.email}</p>
+          <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider">Operations Dashboard</span>
+          <h1 className="text-2xl font-black">Car With Driver India</h1>
+          <p className="text-xs text-slate-400 mt-0.5">Admin: {session.user.email}</p>
         </div>
 
         <div className="flex items-center gap-3">
@@ -241,7 +227,7 @@ export default function AdminDashboard() {
           onClick={() => setActiveTab('bookings')}
           className={`px-5 py-2.5 rounded-xl font-bold text-xs transition-all ${
             activeTab === 'bookings'
-              ? 'bg-emerald-600 text-white shadow-sm'
+              ? 'bg-slate-900 text-white shadow-sm'
               : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
           }`}
         >
@@ -252,7 +238,7 @@ export default function AdminDashboard() {
           onClick={() => setActiveTab('self_drive')}
           className={`px-5 py-2.5 rounded-xl font-bold text-xs transition-all ${
             activeTab === 'self_drive'
-              ? 'bg-emerald-600 text-white shadow-sm'
+              ? 'bg-slate-900 text-white shadow-sm'
               : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
           }`}
         >
@@ -263,7 +249,7 @@ export default function AdminDashboard() {
           onClick={() => setActiveTab('with_driver')}
           className={`px-5 py-2.5 rounded-xl font-bold text-xs transition-all ${
             activeTab === 'with_driver'
-              ? 'bg-emerald-600 text-white shadow-sm'
+              ? 'bg-slate-900 text-white shadow-sm'
               : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
           }`}
         >
@@ -271,10 +257,10 @@ export default function AdminDashboard() {
         </button>
       </div>
 
-      {/* TAB 1: BOOKINGS MANAGEMENT */}
+      {/* TAB 1: BOOKING REQUESTS */}
       {activeTab === 'bookings' && (
         <div className="space-y-4">
-          <h2 className="text-xl font-bold text-slate-900">Incoming Customer Requests</h2>
+          <h2 className="text-xl font-bold text-slate-900">Customer Requests</h2>
 
           {loadingData ? (
             <div className="py-12 text-center text-slate-500 font-semibold">Loading requests...</div>
@@ -287,7 +273,7 @@ export default function AdminDashboard() {
               {bookings.map((b) => (
                 <div key={b.id} className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
                   
-                  {/* Header Line */}
+                  {/* Reference & Status Bar */}
                   <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b border-slate-100 pb-3">
                     <div className="flex items-center gap-3">
                       <span className="font-mono text-sm font-black bg-slate-100 px-3 py-1 rounded-lg text-slate-800">
@@ -303,7 +289,6 @@ export default function AdminDashboard() {
                       </span>
                     </div>
 
-                    {/* Status Dropdown */}
                     <div className="flex items-center gap-2">
                       <span className="text-xs font-bold text-slate-500">Status:</span>
                       <select
@@ -328,7 +313,7 @@ export default function AdminDashboard() {
                   {/* Booking Details Grid */}
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs">
                     
-                    {/* Customer Contact */}
+                    {/* Customer Info */}
                     <div className="space-y-1 bg-slate-50 p-4 rounded-xl">
                       <div className="font-bold text-slate-900 text-sm">{b.customer_name}</div>
                       <div>📞 <strong>Primary:</strong> <a href={`tel:${b.customer_phone}`} className="text-emerald-700 font-bold hover:underline">{b.customer_phone}</a></div>
@@ -336,21 +321,21 @@ export default function AdminDashboard() {
                       <div>✉️ <strong>Email:</strong> {b.customer_email}</div>
                     </div>
 
-                    {/* Trip & Vehicle Snapshot */}
+                    {/* Trip Info */}
                     <div className="space-y-1 bg-slate-50 p-4 rounded-xl">
                       <div className="font-bold text-slate-900 text-sm">🚗 {b.car_name_snapshot}</div>
                       <div><strong>Pickup:</strong> {new Date(b.pickup_datetime).toLocaleString('en-IN')}</div>
                       {b.drop_datetime && <div><strong>Drop:</strong> {new Date(b.drop_datetime).toLocaleString('en-IN')}</div>}
-                      <div><strong>Location:</strong> {b.pickup_location}</div>
-                      {b.drop_location && <div><strong>Destination:</strong> {b.drop_location}</div>}
+                      <div><strong>Pickup Hub:</strong> {b.pickup_location}</div>
+                      {b.drop_location && <div><strong>Drop / Itinerary:</strong> {b.drop_location}</div>}
                     </div>
 
-                    {/* Financial Snapshot */}
+                    {/* Frozen Price Snapshot */}
                     <div className="space-y-1 bg-slate-50 p-4 rounded-xl">
-                      <div className="font-bold text-slate-900 text-sm">💰 Price Snapshot</div>
-                      {b.hourly_rate_snapshot && <div>Rate at booking: ₹{b.hourly_rate_snapshot}/hr ({b.duration_hours_snapshot} hrs)</div>}
-                      {b.estimated_rental_snapshot && <div>Estimated Rental: ₹{b.estimated_rental_snapshot}</div>}
-                      {b.security_deposit_snapshot && <div>Security Deposit: ₹{b.security_deposit_snapshot}</div>}
+                      <div className="font-bold text-slate-900 text-sm">💰 Price Snapshot (Frozen)</div>
+                      {b.hourly_rate_snapshot && <div>Applied Rate: ₹{b.hourly_rate_snapshot}/hr ({b.duration_hours_snapshot} hrs)</div>}
+                      {b.estimated_rental_snapshot && <div>Est. Rental: ₹{b.estimated_rental_snapshot}</div>}
+                      {b.security_deposit_snapshot && <div>Deposit: ₹{b.security_deposit_snapshot}</div>}
                       {b.estimated_total_snapshot && (
                         <div className="font-bold text-emerald-800 text-sm pt-1">
                           Total Estimate: ₹{b.estimated_total_snapshot}
@@ -360,7 +345,7 @@ export default function AdminDashboard() {
 
                   </div>
 
-                  {/* Admin Offline Notes & Quoted Fare */}
+                  {/* Operational Notes & Final Agreed Fare */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 border-t border-slate-100">
                     <div>
                       <label className="block text-[11px] font-bold text-slate-600 mb-1">Final Agreed Quoted Fare (₹)</label>
@@ -378,7 +363,7 @@ export default function AdminDashboard() {
                       <input
                         type="text"
                         defaultValue={b.internal_admin_notes || ''}
-                        placeholder="e.g. Called customer, assigned Driver Rajesh, trip to Pune"
+                        placeholder="e.g. Called customer, confirmed booking"
                         onBlur={(e) => handleUpdateBooking(b.id, { internal_admin_notes: e.target.value })}
                         className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-1.5 text-xs text-slate-900"
                       />
@@ -392,7 +377,7 @@ export default function AdminDashboard() {
         </div>
       )}
 
-      {/* TAB 2: SELF DRIVE FLEET MANAGEMENT */}
+      {/* TAB 2: SELF DRIVE FLEET & RATE MANAGEMENT */}
       {activeTab === 'self_drive' && (
         <div className="space-y-4">
           <h2 className="text-xl font-bold text-slate-900">Manage Self Drive Fleet & Rates</h2>
@@ -407,7 +392,6 @@ export default function AdminDashboard() {
                     <h3 className="text-lg font-bold text-slate-900">{car.model}</h3>
                   </div>
                   
-                  {/* Availability Toggle */}
                   <button
                     onClick={() => handleUpdateSelfDrive(car.id, { is_available: !car.is_available })}
                     className={`text-xs font-bold px-3 py-1.5 rounded-full transition-all ${
@@ -459,10 +443,10 @@ export default function AdminDashboard() {
         </div>
       )}
 
-      {/* TAB 3: WITH DRIVER FLEET MANAGEMENT */}
+      {/* TAB 3: WITH DRIVER FLEET & VENDOR MANAGEMENT */}
       {activeTab === 'with_driver' && (
         <div className="space-y-4">
-          <h2 className="text-xl font-bold text-slate-900">Manage With Driver Packages & Vendor Info</h2>
+          <h2 className="text-xl font-bold text-slate-900">Manage With Driver Fleet & Rates</h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {withDriverFleet.map((car) => (
@@ -482,7 +466,6 @@ export default function AdminDashboard() {
                   </button>
                 </div>
 
-                {/* Customer-Facing Rates */}
                 <div className="grid grid-cols-2 gap-3 text-xs">
                   <div>
                     <label className="block text-slate-500 font-bold mb-1">8Hr / 80KM Package (₹)</label>
@@ -525,10 +508,10 @@ export default function AdminDashboard() {
                   </div>
                 </div>
 
-                {/* Private Vendor Information (Admin Only) */}
+                {/* Private Vendor Information */}
                 <div className="bg-amber-50/50 border border-amber-200/80 p-4 rounded-xl space-y-2 text-xs">
-                  <div className="font-bold text-amber-900 flex items-center gap-1.5">
-                    <span>🔒 Private Partner / Vendor Details (Never shown publicly)</span>
+                  <div className="font-bold text-amber-900">
+                    🔒 Private Partner / Vendor Details (Private to Admin)
                   </div>
 
                   <div className="grid grid-cols-2 gap-2">
