@@ -12,22 +12,22 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           
-          {/* Logo & Business Name */}
+          {/* Logo & Branding */}
           <Link href="/" className="flex items-center space-x-3 group">
-            <div className="w-11 h-11 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-500 flex items-center justify-center text-white shadow-md font-extrabold text-xl">
+            <div className="w-10 h-10 rounded-xl bg-slate-900 flex items-center justify-center text-white font-extrabold text-xl shadow-md">
               C
             </div>
             <div>
-              <span className="text-xl font-extrabold tracking-tight text-slate-900 block leading-tight">
+              <span className="text-xl font-black tracking-tight text-slate-900 block leading-tight">
                 CAR WITH DRIVER
               </span>
-              <span className="text-xs font-semibold tracking-wider text-emerald-600 uppercase">
+              <span className="text-[11px] font-bold tracking-wider text-emerald-600 uppercase">
                 INDIA • SELF DRIVE & CHAUFFEUR
               </span>
             </div>
           </Link>
 
-          {/* Desktop Navigation */}
+          {/* Navigation Links */}
           <nav className="hidden md:flex items-center space-x-8">
             <Link href="/" className="text-sm font-bold text-slate-700 hover:text-emerald-600 transition-colors">
               Home
@@ -43,7 +43,7 @@ export default function Header() {
             </Link>
           </nav>
 
-          {/* Contact & WhatsApp CTA */}
+          {/* Contact Actions */}
           <div className="hidden lg:flex items-center space-x-4">
             <a 
               href={`tel:+91${phoneNumber}`}
@@ -52,7 +52,7 @@ export default function Header() {
               📞 +91 {phoneNumber}
             </a>
             <a
-              href={`https://wa.me/91${phoneNumber}?text=Hi%2C%20I%20want%20to%20book%20a%20car`}
+              href={`https://wa.me/91${phoneNumber}?text=Hi%2C%20I%20want%20to%20inquire%20about%20a%20car%20booking`}
               target="_blank"
               rel="noopener noreferrer"
               className="bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold px-5 py-2.5 rounded-full shadow-md transition-all flex items-center gap-2"
@@ -66,6 +66,7 @@ export default function Header() {
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="text-slate-700 p-2 rounded-lg hover:bg-slate-100"
+              aria-label="Toggle Menu"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
@@ -78,10 +79,10 @@ export default function Header() {
         {mobileMenuOpen && (
           <div className="md:hidden py-4 border-t border-slate-100 flex flex-col space-y-3 pb-6">
             <Link href="/" onClick={() => setMobileMenuOpen(false)} className="px-3 py-2 rounded-md font-bold text-slate-800">Home</Link>
-            <Link href="/with-driver" onClick={() => setMobileMenuOpen(false)} className="px-3 py-2 rounded-md font-bold text-slate-800">With Driver (Local & Outstation)</Link>
-            <Link href="/self-drive" onClick={() => setMobileMenuOpen(false)} className="px-3 py-2 rounded-md font-bold text-slate-800">Self Drive</Link>
+            <Link href="/with-driver" onClick={() => setMobileMenuOpen(false)} className="px-3 py-2 rounded-md font-bold text-slate-800">With Driver (Chauffeur)</Link>
+            <Link href="/self-drive" onClick={() => setMobileMenuOpen(false)} className="px-3 py-2 rounded-md font-bold text-slate-800">Self Drive Fleet</Link>
             <a href={`tel:+91${phoneNumber}`} className="px-3 py-2 text-emerald-700 font-bold">📞 Call: +91 {phoneNumber}</a>
-            <a href={`https://wa.me/91${phoneNumber}?text=Hi%2C%20I%20want%20to%20book%20a%20car`} className="bg-emerald-600 text-white text-center py-2.5 rounded-xl font-bold">Book on WhatsApp</a>
+            <a href={`https://wa.me/91${phoneNumber}?text=Hi%2C%20I%20want%20to%20inquire%20about%20a%20car%20booking`} className="bg-emerald-600 text-white text-center py-2.5 rounded-xl font-bold">Book on WhatsApp</a>
           </div>
         )}
       </div>
