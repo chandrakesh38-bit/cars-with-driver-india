@@ -49,7 +49,7 @@ export default function HomePage() {
 
               <div className="pt-6">
                 <Link
-                  href="/explore-cars"
+                  href="/self-drive"
                   className="block text-center w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black py-3.5 px-6 rounded-2xl shadow-md transition-all text-sm uppercase tracking-wider"
                 >
                   Book Self Drive ➔
@@ -110,7 +110,7 @@ export default function HomePage() {
             <p className="text-xs text-slate-500">Explore all available hatchbacks, sedans, SUVs, and luxury cars.</p>
           </div>
           <Link
-            href="/explore-cars"
+            href="/self-drive"
             className="w-full sm:w-auto bg-slate-900 hover:bg-slate-800 text-white font-bold px-6 py-3 rounded-xl text-xs text-center transition-all whitespace-nowrap"
           >
             Explore Complete Fleet ➔
