@@ -7,7 +7,7 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-slate-50 space-y-16 pb-20">
       
-      {/* HOMEPAGE HERO SECTION */}
+      {/* 1. HOMEPAGE HERO SECTION */}
       <section className="relative bg-gradient-to-b from-slate-900 via-slate-900 to-slate-800 text-white pt-14 pb-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-5xl mx-auto text-center space-y-6">
           
@@ -101,7 +101,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* QUICK FLEET PREVIEW CTA BANNER */}
+      {/* 2. EXPLORE CATALOG BANNER */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-sm">
           <div className="space-y-1">
